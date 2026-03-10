@@ -1,5 +1,6 @@
-Name:
-Github Repository:
+Name: ANAM SHAMSI
+
+Github Repository: https://github.com/anamahmedshamsi12/Board-Game-Arena-Planner.git
 
 How many hours did it take you to complete this assignment (estimate)?
 
