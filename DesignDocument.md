@@ -10,9 +10,109 @@ If you are using mermaid markup to generate your class diagrams, you may edit th
 
 Include a UML class diagram of your initial design for this assignment. If you are using the mermaid markdown, you may include the code for it here. For a reminder on the mermaid syntax, you may go [here](https://mermaid.js.org/syntax/classDiagram.html)
 
+
+
 ### Provided Code
 
 Provide a class diagram for the provided code as you read through it.  For the classes you are adding, you will create them as a separate diagram, so for now, you can just point towards the interfaces for the provided code diagram.
+
+
+```mermaid
+classDiagram
+    direction TB
+
+    class IGameList {
+        <>
+        +String ADD_ALL$
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String filename) void
+        +addToList(String str, Stream~BoardGame~ filtered) void
+        +removeFromList(String str) void
+    }
+
+    class IPlanner {
+        <>
+        +filter(String filter) Stream~BoardGame~
+        +filter(String filter, GameData sortOn) Stream~BoardGame~
+        +filter(String filter, GameData sortOn, boolean ascending) Stream~BoardGame~
+        +reset() void
+    }
+
+    class BoardGame {
+        -String name
+        -int id
+        -int minPlayers
+        -int maxPlayers
+        -int minPlayTime
+        -int maxPlayTime
+        -double difficulty
+        -int rank
+        -double averageRating
+        -int yearPublished
+        +getName() String
+        +getId() int
+        +getMinPlayers() int
+        +getMaxPlayers() int
+        +getMinPlayTime() int
+        +getMaxPlayTime() int
+        +getDifficulty() double
+        +getRank() int
+        +getRating() double
+        +getYearPublished() int
+        +toStringWithInfo(GameData col) String
+        +equals(Object obj) boolean
+        +hashCode() int
+    }
+
+    class GameData {
+        <>
+        NAME
+        ID
+        RATING
+        DIFFICULTY
+        RANK
+        MIN_PLAYERS
+        MAX_PLAYERS
+        MIN_TIME
+        MAX_TIME
+        YEAR
+        +getColumnName() String
+        +fromColumnName(String columnName)$ GameData
+        +fromString(String name)$ GameData
+    }
+
+    class Operations {
+        <>
+        EQUALS
+        NOT_EQUALS
+        GREATER_THAN
+        LESS_THAN
+        GREATER_THAN_EQUALS
+        LESS_THAN_EQUALS
+        CONTAINS
+        +getOperator() String
+        +fromOperator(String operator)$ Operations
+        +getOperatorFromStr(String str)$ Operations
+    }
+
+    class GamesLoader {
+        +loadGamesFile(String filename)$ Set~BoardGame~
+    }
+
+    %% GameList and Planner exist as stubs pointing to their interfaces
+    class GameList {
+        +GameList()
+    }
+
+    class Planner {
+        +Planner(Set~BoardGame~ games)
+    }
+
+    GameList ..|> IGameList : implements
+    Planner ..|> IPlanner : implements
+```
 
 
 
@@ -20,6 +120,39 @@ Provide a class diagram for the provided code as you read through it.  For the c
 
 Create a class diagram for the classes you plan to create. This is your initial design, and it is okay if it changes. Your starting points are the interfaces. 
 
+```mermaid
+classDiagram
+    direction TB
+
+    class GameList {
+        -Set~BoardGame~ games
+        +GameList()
+        +getGameNames() List~String~
+        +clear() void
+        +count() int
+        +saveGame(String filename) void
+        +addToList(String str, Stream~BoardGame~ filtered) void
+        +removeFromList(String str) void
+        -addByIndex(int index, List~BoardGame~ list) void
+        -addByName(String name, List~BoardGame~ list) void
+        -addRange(String range, List~BoardGame~ list) void
+    }
+
+    class Planner {
+        -Set~BoardGame~ allGames
+        -Set~BoardGame~ filteredGames
+        +Planner(Set~BoardGame~ games)
+        +filter(String filter) Stream~BoardGame~
+        +filter(String filter, GameData sortOn) Stream~BoardGame~
+        +filter(String filter, GameData sortOn, boolean ascending) Stream~BoardGame~
+        +reset() void
+        -applyFilter(String filter, Stream~BoardGame~ stream) Stream~BoardGame~
+        -sortStream(Stream~BoardGame~ stream, GameData col, boolean asc) Stream~BoardGame~
+    }
+
+    GameList ..|> IGameList : implements
+    Planner ..|> IPlanner : implements
+```
 
 
 
@@ -38,8 +171,22 @@ Write a test (in english) that you can picture for the class diagram you have cr
 
 You should feel free to number your brainstorm. 
 
-1. Test 1..
-2. Test 2..
+1. testFilterNameEquals — filtering `name == Go` should return exactly 1 game named "Go".
+2. testFilterNameContains — filtering `name ~= go` should return all games whose name contains "go" (case-insensitive).
+3. testFilterMinPlayersGreaterThan — `minPlayers > 5` should return only games with minPlayers above 5.
+4. testFilterRatingGreaterThanOrEqual — `rating >= 9.0` should return only games with a rating of 9.0 or higher.
+5. testFilterMultipleFiltersAnd — a comma-separated filter like `minPlayers > 1, maxPlayers < 6` should apply both conditions together.
+6. testResetRestoresAllGames — after applying a filter, calling reset() should restore the full game collection.
+7. testFilterEmptyStringReturnsSortedByName — calling filter("") should return all current games sorted A-Z by name.
+8. testFilterSortByRatingDescending — sorting by RATING descending should put the highest-rated game first.
+9. testGameListStartsEmpty — a newly constructed GameList should have a count of 0.
+10. testAddAllToList — addToList("all", stream) should add every game from the filtered stream to the list.
+11. testAddByName — addToList with a game name should add just that one matching game.
+12. testAddByIndex — addToList with a number like "1" should add the first game in the filtered stream.
+13. testAddByRange — addToList with a range like "1-3" should add the first 3 games from the filtered stream.
+14. testGetGameNamesSortedOrder — getGameNames() should always return names in ascending alphabetical order ignoring case.
+15. testRemoveByName — removeFromList with a game name should remove only that game from the list.
+
 
 
 
