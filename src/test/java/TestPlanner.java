@@ -1,13 +1,16 @@
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import student.BoardGame;
+import student.GameList;
+import student.IGameList;
+import student.IPlanner;
+import student.GameData;
+import student.Planner;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import student.Planner;
-import student.IPlanner;
-import student.GameData;
 
 
 /**
@@ -126,5 +129,14 @@ public class TestPlanner {
     public void testGameListStartsEmpty() {
         IGameList list = new GameList();
         assertEquals(0, list.count());
+    }
+
+    @Test
+    public void testAddAllToList() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        assertEquals(4, list.count());
     }
 }
