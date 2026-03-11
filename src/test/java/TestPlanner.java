@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
@@ -192,5 +193,67 @@ public class TestPlanner {
         list.removeFromList("Go");
         assertEquals(3, list.count());
         assertFalse(list.getGameNames().contains("Go"));
+    }
+
+    @Test
+    public void testRemoveByIndex() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        list.removeFromList("2");
+        assertEquals(3, list.count());
+        assertFalse(list.getGameNames().contains("Go Fish"));
+    }
+
+    @Test
+    public void testRemoveByRange() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        list.removeFromList("1-2");
+        assertEquals(2, list.count());
+        assertFalse(list.getGameNames().contains("Go"));
+        assertFalse(list.getGameNames().contains("Go Fish"));
+    }
+
+    @Test
+    public void testAddByIndexOutOfRangeThrows() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.addToList("10", stream);
+        });
+    }
+
+    @Test
+    public void testAddByNameNotFoundThrows() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.addToList("Chess", stream);
+        });
+    }
+
+    @Test
+    public void testRemoveByNameNotFoundThrows() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.removeFromList("Chess");
+        });
+    }
+
+    @Test
+    public void testRemoveFromEmptyListThrows() {
+        IGameList list = new GameList();
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.removeFromList("1");
+        });
     }
 }
