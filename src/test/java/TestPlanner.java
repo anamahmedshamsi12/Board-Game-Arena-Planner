@@ -121,4 +121,10 @@ public class TestPlanner {
         List<BoardGame> result = planner.filter("").toList();
         assertEquals(8, result.size());
     }
+
+    @Test
+    public void testGameListStartsEmpty() {
+        IGameList list = new GameList();
+        assertEquals(0, list.count());
+    }
 }
