@@ -1,3 +1,4 @@
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -180,5 +181,16 @@ public class TestPlanner {
         assertEquals("Go Fish", names.get(1));
         assertEquals("golang", names.get(2));
         assertEquals("GoRami", names.get(3));
+    }
+
+    @Test
+    public void testRemoveByName() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        list.removeFromList("Go");
+        assertEquals(3, list.count());
+        assertFalse(list.getGameNames().contains("Go"));
     }
 }
