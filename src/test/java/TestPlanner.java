@@ -159,4 +159,26 @@ public class TestPlanner {
         assertEquals(1, list.count());
         assertEquals("Go", list.getGameNames().get(0));
     }
+
+    @Test
+    public void testAddByRange() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("1-3", stream);
+        assertEquals(3, list.count());
+    }
+
+    @Test
+    public void testGetGameNamesSortedOrder() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        List<String> names = list.getGameNames();
+        assertEquals("Go", names.get(0));
+        assertEquals("Go Fish", names.get(1));
+        assertEquals("golang", names.get(2));
+        assertEquals("GoRami", names.get(3));
+    }
 }
