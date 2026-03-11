@@ -38,7 +38,7 @@ public class Planner implements IPlanner {
      * @param games the full collection of board games to plan with; must not be null
      */
     public Planner(Set<BoardGame> games) {
-        // Store the original set so reset() can always go back to the full collection
+        // store the original set so reset() can always go back to the full collection
         this.allGames = new HashSet<>(games);
         // filteredGames starts as a full copy -- no filters applied yet
         this.filteredGames = new HashSet<>(games);
@@ -78,8 +78,14 @@ public class Planner implements IPlanner {
      * returns the results.
      *
      * <p>This is the core filter method that all other overloads delegate to.
-     * For now it just returns the current filteredGames as a stream so the constructor
-     * and basic stream tests can run. Real filter and sort logic will be added next.
+     *
+     * <p>How it works:
+     * <ol>
+     *   <li>If the filter string is empty, skip filtering and return current games.</li>
+     *   <li>Split on commas -- each piece is one filter condition (ANDed together).</li>
+     *   <li>Call Filter.apply() for each piece to narrow the stream.</li>
+     *   <li>Collect back into filteredGames so the next call continues from here.</li>
+     * </ol>
      *
      * @param filter    the filter expression, possibly comma-separated for multiple filters
      * @param sortOn    the column to sort on
@@ -88,11 +94,35 @@ public class Planner implements IPlanner {
      */
     @Override
     public Stream<BoardGame> filter(String filter, GameData sortOn, boolean ascending) {
-        // TODO Step 3: add name filter parsing
-        // TODO Step 4: add numeric filter parsing
-        // TODO Step 5: add comma-separated AND logic
-        // TODO Step 6: add sort logic
-        // For now, just return the full filtered set as a stream so tests don't crash
+        // if the filter string is empty, skip filtering and just return what we currently have
+        if (filter == null || filter.trim().isEmpty()) {
+            return filteredGames.stream();
+        }
+
+        // split on commas so "minPlayers>2,maxPlayers<6" becomes two separate filter pieces
+        // each piece is ANDed together -- each one narrows the results further
+        String[] filterParts = filter.split(",");
+
+        // start with a stream of whatever is currently in filteredGames
+        Stream<BoardGame> stream = filteredGames.stream();
+
+        // apply each individual filter piece one at a time
+        for (String part : filterParts) {
+            String trimmed = part.trim();
+            if (!trimmed.isEmpty()) {
+                // Filter.apply() handles parsing the operator, column, and value
+                stream = Filter.apply(trimmed, stream);
+            }
+        }
+
+        // collect the result back into filteredGames so the NEXT filter() call
+        // continues narrowing from here instead of starting over
+        // we must collect first because a Stream can only be consumed once
+        Set<BoardGame> result = new HashSet<>();
+        stream.forEach(result::add);
+        filteredGames = result;
+
+        // TODO Step 6: replace this with GameSorter.sort() once sort logic is ready
         return filteredGames.stream();
     }
 
@@ -100,10 +130,11 @@ public class Planner implements IPlanner {
      * Resets the planner back to the full original game collection with no filters applied.
      *
      * <p>After calling reset(), the next filter() call will search across all games again.
+     * This is done by replacing filteredGames with a fresh copy of allGames.
      */
     @Override
     public void reset() {
-        // TODO Step 7: implement reset
-        throw new UnsupportedOperationException("Unimplemented method 'reset'");
+        // replace the current filtered set with a fresh copy of the complete original set
+        filteredGames = new HashSet<>(allGames);
     }
 }
