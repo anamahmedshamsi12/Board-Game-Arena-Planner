@@ -96,7 +96,7 @@ public class Planner implements IPlanner {
     public Stream<BoardGame> filter(String filter, GameData sortOn, boolean ascending) {
         // if the filter string is empty, skip filtering and just return what we currently have
         if (filter == null || filter.trim().isEmpty()) {
-            return filteredGames.stream();
+            return GameSorter.sort(filteredGames.stream(), sortOn, ascending);
         }
 
         // split on commas so "minPlayers>2,maxPlayers<6" becomes two separate filter pieces

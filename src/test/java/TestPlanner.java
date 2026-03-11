@@ -112,4 +112,13 @@ public class TestPlanner {
         List<BoardGame> filtered = planner.filter("", GameData.RATING, false).toList();
         assertEquals("Chess", filtered.get(0).getName());
     }
+
+    @Test
+    public void testResetRestoresAllGames() {
+        IPlanner planner = new Planner(games);
+        planner.filter("name == Go");
+        planner.reset();
+        List<BoardGame> result = planner.filter("").toList();
+        assertEquals(8, result.size());
+    }
 }
