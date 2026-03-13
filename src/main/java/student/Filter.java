@@ -5,7 +5,8 @@ import java.util.stream.Stream;
 /**
  * Utility class for applying a single filter expression to a stream of BoardGame objects.
  */
-public class Filter {
+public final class Filter {
+
 
     private Filter() { }
 
