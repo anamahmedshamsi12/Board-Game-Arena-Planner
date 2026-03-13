@@ -47,10 +47,15 @@ public final class Filter {
         return stream.filter(game -> {
             String name = game.getName().toLowerCase();
             String val = value.toLowerCase();
+            int cmp = name.compareToIgnoreCase(val);
             switch (op) {
                 case EQUALS: return name.equals(val);
                 case NOT_EQUALS: return !name.equals(val);
                 case CONTAINS: return name.contains(val);
+                case GREATER_THAN: return cmp > 0;
+                case LESS_THAN: return cmp < 0;
+                case GREATER_THAN_EQUALS: return cmp >= 0;
+                case LESS_THAN_EQUALS: return cmp <= 0;
                 default: return false;
             }
         });
