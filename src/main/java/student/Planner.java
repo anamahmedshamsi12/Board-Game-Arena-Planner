@@ -123,7 +123,8 @@ public class Planner implements IPlanner {
         filteredGames = result;
 
         // TODO Step 6: replace this with GameSorter.sort() once sort logic is ready
-        return filteredGames.stream();
+        return GameSorter.sort(filteredGames.stream(), sortOn, ascending);
+
     }
 
     /**
