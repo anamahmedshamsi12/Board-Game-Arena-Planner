@@ -48,7 +48,7 @@ public class GameList implements IGameList {
     public List<String> getGameNames() {
         return games.stream()
                 .map(BoardGame::getName)
-                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .sorted((a, b) -> a.compareToIgnoreCase(b))
                 .collect(Collectors.toList());
     }
 
