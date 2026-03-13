@@ -7,7 +7,6 @@ import java.util.stream.Stream;
  */
 public final class Filter {
 
-
     private Filter() { }
 
     /**
@@ -23,22 +22,19 @@ public final class Filter {
             return filteredGames;
         }
 
-        // remove spaces
-        filter = filter.replaceAll(" ", "");
-
-        String[] parts = filter.split(java.util.regex.Pattern.quote(operator.getOperator()));
-        if (parts.length != 2) {
-            return filteredGames;
-        }
+        // split on the operator position to preserve spaces inside the value
+        // e.g. "name ~= go fish" -> column="name", value="go fish"
+        String op = operator.getOperator();
+        int opIndex = filter.indexOf(op);
+        String columnName = filter.substring(0, opIndex).trim();
+        String value = filter.substring(opIndex + op.length()).trim();
 
         GameData column;
         try {
-            column = GameData.fromString(parts[0]);
+            column = GameData.fromString(columnName);
         } catch (IllegalArgumentException e) {
             return filteredGames;
         }
-
-        String value = parts[1].trim();
 
         if (column == GameData.NAME) {
             return applyStringFilter(filteredGames, operator, value);
