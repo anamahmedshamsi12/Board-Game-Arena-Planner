@@ -138,3 +138,4 @@ public class Planner implements IPlanner {
         filteredGames = new HashSet<>(allGames);
     }
 }
+
