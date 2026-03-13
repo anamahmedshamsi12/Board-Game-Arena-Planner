@@ -193,6 +193,14 @@ various spoken languages around the world? What about areas with internet access
 
 
 As a reminder, deeper thinking questions are meant to require some research and to be answered in a paragraph for with references. The goal is to open up some of the discussion topics in CS, so you are better informed going into industry.
+
+> Using a `.properties` file to store display strings is a well-established pattern in software development that makes localization far more manageable. In Java, this is supported through the `ResourceBundle` mechanism, whose purpose is to provide an application with localized messages and descriptions that can be externalized to separate files [7]. This means developers can swap out text for different languages without ever touching the core logic of the program. As seen in the BGArenaPlanner, changing the welcome and goodbye messages to French required only editing the `.properties` file — no recompilation or code changes were needed.
+>
+>However, localization goes far beyond simply translating words. Baeldung notes that distinct cultural or language regions determine not only language-specific descriptions but also currency, number representation, and date and time formats [7]. For example, the number `102,300.45` is written as `102.300,45` in Germany and `102 300,45` in Poland [7]. The current BGArenaPlanner does not account for any of these differences — if the game list included prices or dates, they would still display in the default format regardless of the language set in the properties file.
+> here are also deeper pitfalls to watch out for. One common mistake is not accounting for longer words in other languages — when buttons or UI elements are designed with English text in mind, translations in languages like German may simply not fit [8]. Another issue is ignoring dialects: European French and Canadian French use different words and expressions, so localizing for a language rather than a specific region can still feel unnatural to users [8]. The BGArenaPlanner demonstrates this limitation clearly — while the display messages were translated to French, the actual commands (`help`, `filter`, `exit`) still must be typed in English, meaning the application is only partially localized and would still feel foreign to a native French speaker.
+>
+>In summary, while the `.properties` file approach is a strong first step, true localization requires careful planning around formatting, dialects, UI layout, and even the commands users interact with.
+
 ### References 
 [1] Baeldung. 2025. Difference Between == and equals() in Java.
 Retrieved from https://www.baeldung.com/java-equals-method-operator-difference
@@ -206,3 +214,8 @@ Retrieved from https://www.baeldung.com/java-equals-method-operator-difference
 [5] Oracle, "Map (Java SE 17 & JDK 17)," *Oracle Java Documentation*, 2021. [Online]. Available: https://docs.oracle.com/en/java/docs/api/java.base/java/util/Map.html. 
 
 [6] Oracle, "Enum Types," *The Java Tutorials*, 2021. [Online]. Available: https://docs.oracle.com/javase/tutorial/java/javaOO/enum.html.
+
+[7] Baeldung, "Java Internationalization – Formatting Messages," *Baeldung*, 2023. [Online]. Available: https://www.baeldung.com/java-8-localization.
+
+[8] Guest Author, "10 Localization Mistakes That Can Cost You Business," *IVANNOVATION*, Jul. 12, 2022. [Online]. Available: https://ivannovation.com/blog/10-localization-mistakes-that-can-cost-you-business/. 
+ 
