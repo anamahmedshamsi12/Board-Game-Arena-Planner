@@ -46,9 +46,9 @@ public class GameList implements IGameList {
      */
     @Override
     public List<String> getGameNames() {
-        // TreeSet is already sorted so no extra sorting needed here
         return games.stream()
                 .map(BoardGame::getName)
+                .sorted(String.CASE_INSENSITIVE_ORDER)
                 .collect(Collectors.toList());
     }
 

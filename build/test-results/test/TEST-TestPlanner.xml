@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="TestPlanner" tests="19" skipped="0" failures="0" errors="0" timestamp="2026-03-13T10:50:38" hostname="MacBook-Pro.home" time="0.036">
+  <properties/>
+  <testcase name="testFilterSortByRatingDescending()" classname="TestPlanner" time="0.009"/>
+  <testcase name="testGetGameNamesSortedOrder()" classname="TestPlanner" time="0.003"/>
+  <testcase name="testAddByIndexOutOfRangeThrows()" classname="TestPlanner" time="0.003"/>
+  <testcase name="testRemoveByIndex()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testRemoveByRange()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testResetRestoresAllGames()" classname="TestPlanner" time="0.003"/>
+  <testcase name="testRemoveByNameNotFoundThrows()" classname="TestPlanner" time="0.002"/>
+  <testcase name="testFilterRatingGreaterThanOrEqual()" classname="TestPlanner" time="0.002"/>
+  <testcase name="testRemoveByName()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testFilterMinPlayersGreaterThan()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testAddByName()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testAddAllToList()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testRemoveFromEmptyListThrows()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testFilterMultipleFiltersAnd()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testGameListStartsEmpty()" classname="TestPlanner" time="0.0"/>
+  <testcase name="testAddByIndex()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testAddByRange()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testAddByNameNotFoundThrows()" classname="TestPlanner" time="0.001"/>
+  <testcase name="testFilterName()" classname="TestPlanner" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

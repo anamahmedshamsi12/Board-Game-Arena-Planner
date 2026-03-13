@@ -4,12 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="220b0af4-3cba-493a-8281-02bf2f905eb3" name="Changes" comment="report last questions">
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4.2/checksums/checksums.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4.2/checksums/checksums.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4.2/dependencies-accessors/dependencies-accessors.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4.2/dependencies-accessors/dependencies-accessors.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/7.4.2/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/7.4.2/fileHashes/fileHashes.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/student/Filter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/student/Filter.java" afterDir="false" />
+    <list default="true" id="220b0af4-3cba-493a-8281-02bf2f905eb3" name="Changes" comment="stylecheck">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -234,7 +230,23 @@
       <option name="project" value="LOCAL" />
       <updated>1773377354555</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="stylecheck">
+      <option name="closed" value="true" />
+      <created>1773377866862</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1773377866862</updated>
+    </task>
+    <task id="LOCAL-00015" summary="stylecheck">
+      <option name="closed" value="true" />
+      <created>1773378129400</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773378129400</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -248,7 +260,8 @@
     <MESSAGE value="added new test" />
     <MESSAGE value="added to Report.md" />
     <MESSAGE value="report last questions" />
-    <option name="LAST_COMMIT_MESSAGE" value="report last questions" />
+    <MESSAGE value="stylecheck" />
+    <option name="LAST_COMMIT_MESSAGE" value="stylecheck" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
