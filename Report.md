@@ -27,7 +27,7 @@ the `HashSet` in `Planner` behave correctly when storing and comparing games.
     System.out.println(a.equals(b)); 
    ```
 
-Logical sorting can be difficult when talking about case. For example, should "apple" come before "Banana" or after? How would you sort a list of strings in a case-insensitive manner?
+2. Logical sorting can be difficult when talking about case. For example, should "apple" come before "Banana" or after? How would you sort a list of strings in a case-insensitive manner?
 > **(2) Answer:** In Java, case-sensitive sorting treats uppercase and lowercase letters differently, meaning "Banana" would come before "apple" since uppercase letters have lower ASCII values. To sort case-insensitively, we pass `String.CASE_INSENSITIVE_ORDER` as a comparator to `Collections.sort()` [2]:
 #### (2) Pseudocode for example of how to sort list of strings in case-insensitive manner:
 ```java
