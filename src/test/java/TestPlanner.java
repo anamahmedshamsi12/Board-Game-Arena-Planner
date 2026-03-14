@@ -1,6 +1,9 @@
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.stream.Stream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import student.BoardGame;
@@ -104,6 +107,12 @@ public class TestPlanner {
         assertEquals(3, filtered.size());
     }
 
+    /**
+     * Test: comma-separated filters are ANDed together.
+     *
+     * "minPlayers > 1, maxPlayers < 6" should return only games where both
+     * conditions are true. In our dataset that is Go (2-5) and Chess (2-2).
+     */
     @Test
     public void testFilterMultipleFiltersAnd() {
         IPlanner planner = new Planner(games);
@@ -111,6 +120,12 @@ public class TestPlanner {
         assertEquals(2, filtered.size());
     }
 
+    /**
+     * Test: sorting by rating descending puts the highest rated game first.
+     *
+     * Chess has a rating of 10.0 which is the highest in our dataset,
+     * so it should appear first when sorting by RATING descending.
+     */
     @Test
     public void testFilterSortByRatingDescending() {
         IPlanner planner = new Planner(games);
@@ -118,6 +133,12 @@ public class TestPlanner {
         assertEquals("Chess", filtered.get(0).getName());
     }
 
+    /**
+     * Test: reset restores the full game collection after filtering.
+     *
+     * After filtering down to one game and calling reset(), the next filter
+     * should search across all 8 games again.
+     */
     @Test
     public void testResetRestoresAllGames() {
         IPlanner planner = new Planner(games);
@@ -127,12 +148,18 @@ public class TestPlanner {
         assertEquals(8, result.size());
     }
 
+    /**
+     * Test: a newly constructed GameList should have a count of 0.
+     */
     @Test
     public void testGameListStartsEmpty() {
         IGameList list = new GameList();
         assertEquals(0, list.count());
     }
 
+    /**
+     * Test: addToList("all", stream) adds every game in the stream.
+     */
     @Test
     public void testAddAllToList() {
         IPlanner planner = new Planner(games);
@@ -142,6 +169,9 @@ public class TestPlanner {
         assertEquals(4, list.count());
     }
 
+    /**
+     * Test: addToList with a game name adds just that one matching game.
+     */
     @Test
     public void testAddByName() {
         IPlanner planner = new Planner(games);
@@ -152,6 +182,9 @@ public class TestPlanner {
         assertEquals("Chess", list.getGameNames().get(0));
     }
 
+    /**
+     * Test: addToList with an index adds the game at that 1-based position.
+     */
     @Test
     public void testAddByIndex() {
         IPlanner planner = new Planner(games);
@@ -162,6 +195,9 @@ public class TestPlanner {
         assertEquals("Go", list.getGameNames().get(0));
     }
 
+    /**
+     * Test: addToList with a range adds the correct number of games.
+     */
     @Test
     public void testAddByRange() {
         IPlanner planner = new Planner(games);
@@ -171,6 +207,9 @@ public class TestPlanner {
         assertEquals(3, list.count());
     }
 
+    /**
+     * Test: getGameNames returns names in ascending case-insensitive alphabetical order.
+     */
     @Test
     public void testGetGameNamesSortedOrder() {
         IPlanner planner = new Planner(games);
@@ -184,6 +223,9 @@ public class TestPlanner {
         assertEquals("GoRami", names.get(3));
     }
 
+    /**
+     * Test: removeFromList by name removes only the matching game.
+     */
     @Test
     public void testRemoveByName() {
         IPlanner planner = new Planner(games);
@@ -195,6 +237,9 @@ public class TestPlanner {
         assertFalse(list.getGameNames().contains("Go"));
     }
 
+    /**
+     * Test: removeFromList by index removes the game at that position.
+     */
     @Test
     public void testRemoveByIndex() {
         IPlanner planner = new Planner(games);
@@ -206,6 +251,9 @@ public class TestPlanner {
         assertFalse(list.getGameNames().contains("Go Fish"));
     }
 
+    /**
+     * Test: removeFromList with a range removes all games in that range.
+     */
     @Test
     public void testRemoveByRange() {
         IPlanner planner = new Planner(games);
@@ -218,6 +266,9 @@ public class TestPlanner {
         assertFalse(list.getGameNames().contains("Go Fish"));
     }
 
+    /**
+     * Test: addToList with an out-of-range index throws IllegalArgumentException.
+     */
     @Test
     public void testAddByIndexOutOfRangeThrows() {
         IPlanner planner = new Planner(games);
@@ -228,6 +279,9 @@ public class TestPlanner {
         });
     }
 
+    /**
+     * Test: addToList with a name not in the filtered stream throws IllegalArgumentException.
+     */
     @Test
     public void testAddByNameNotFoundThrows() {
         IPlanner planner = new Planner(games);
@@ -238,6 +292,9 @@ public class TestPlanner {
         });
     }
 
+    /**
+     * Test: removeFromList with a name not in the list throws IllegalArgumentException.
+     */
     @Test
     public void testRemoveByNameNotFoundThrows() {
         IPlanner planner = new Planner(games);
@@ -249,11 +306,91 @@ public class TestPlanner {
         });
     }
 
+    /**
+     * Test: removeFromList on an empty list throws IllegalArgumentException.
+     */
     @Test
     public void testRemoveFromEmptyListThrows() {
         IGameList list = new GameList();
         assertThrows(IllegalArgumentException.class, () -> {
             list.removeFromList("1");
+        });
+    }
+
+    /**
+     * Test: clear() removes all games from the list.
+     */
+    @Test
+    public void testClear() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("");
+        list.addToList("all", stream);
+        list.clear();
+        assertEquals(0, list.count());
+    }
+
+    /**
+     * Test: saveGame writes game names to a file in sorted order.
+     *
+     * After saving, reading the file back should produce the same list
+     * as getGameNames().
+     */
+    @Test
+    public void testSaveGame() throws Exception {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        String filename = "test_save_output.txt";
+        list.saveGame(filename);
+        List<String> lines = Files.readAllLines(Paths.get(filename));
+        assertEquals(list.getGameNames(), lines);
+    }
+
+    /**
+     * Test: adding the same game twice does not increase the count.
+     *
+     * Since GameList uses a Set, duplicates should be silently ignored.
+     */
+    @Test
+    public void testAddDuplicateDoesNotIncreaseCount() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream1 = planner.filter("name == Go");
+        list.addToList("all", stream1);
+        planner.reset();
+        Stream<BoardGame> stream2 = planner.filter("name == Go");
+        list.addToList("all", stream2);
+        assertEquals(1, list.count());
+    }
+
+    /**
+     * Test: addToList with lowercase name still finds the correct game.
+     *
+     * Name matching should be case-insensitive so "chess" finds "Chess".
+     */
+    @Test
+    public void testAddByNameCaseInsensitive() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("");
+        list.addToList("chess", stream);
+        assertEquals(1, list.count());
+        assertEquals("Chess", list.getGameNames().get(0));
+    }
+
+    /**
+     * Test: removeFromList with an inverted range (end less than start) throws.
+     */
+    @Test
+    public void testInvertedRangeThrows() {
+        IPlanner planner = new Planner(games);
+        IGameList list = new GameList();
+        Stream<BoardGame> stream = planner.filter("name ~= go");
+        list.addToList("all", stream);
+        assertThrows(IllegalArgumentException.class, () -> {
+            list.removeFromList("3-1");
         });
     }
 }
